@@ -1,0 +1,19 @@
+[project]
+name = "api-service"
+version = "0.1.0"
+description = "API Service for EzConstruct application"
+readme = {file = "README.md", content-type = "text/markdown"}
+authors = [
+    { name = "Guilherme Rodrigues", email = "guilherme.b.rodrigues@skf.com" }
+]
+requires-python = ">=3.13"
+dependencies = [
+    "fastapi[standard]>=0.115.13",
+    "pydantic-settings>=2.10.1",
+    "sqlalchemy>=2.0.41",
+]
+
+[dependency-groups]
+dev = [
+    "pre-commit>=4.2.0",
+]
