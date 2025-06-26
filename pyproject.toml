@@ -1,7 +1,7 @@
 [project]
-name = "api-service"
+name = "fastapi-blueprint"
 version = "0.1.0"
-description = "API Service for EzConstruct application"
+description = "FastAPI blueprint for large scale applications"
 readme = {file = "README.md", content-type = "text/markdown"}
 authors = [
     { name = "Guilherme Rodrigues", email = "guilherme.b.rodrigues@skf.com" }
