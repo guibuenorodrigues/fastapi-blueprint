@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 
 from src import routes
+from src.api.middleware.error_handling import ErrorHandlingMiddleware
+from src.api.middleware.request_logging import RequestLoggingMiddleware
 from src.core.config import settings
 from src.core.logging import setup_logging
 
@@ -18,6 +20,9 @@ def create_app() -> FastAPI:
         description=settings.DESCRIPTION,
         version=settings.VERSION,
     )
+
+    app.add_middleware(ErrorHandlingMiddleware)
+    app.add_middleware(RequestLoggingMiddleware)
 
     routes.setup(app)
 
