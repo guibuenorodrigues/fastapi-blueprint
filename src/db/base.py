@@ -1,4 +1,8 @@
-from sqlalchemy.orm import DeclarativeBase
+from datetime import datetime
+from typing import Annotated
+
+from sqlalchemy import DateTime, func
+from sqlalchemy.orm import DeclarativeBase, mapped_column
 
 
 class Base(DeclarativeBase):
@@ -7,4 +11,15 @@ class Base(DeclarativeBase):
     Provides common functionality like table name generation.
     """
 
-    pass
+    type_annotation_map = {datetime: DateTime(timezone=True)}
+
+
+T_CreatedAt = Annotated[
+    datetime,
+    mapped_column(server_default=func.current_timestamp(), nullable=False),
+]
+
+T_ModifiedAt = Annotated[
+    datetime,
+    mapped_column(server_default=func.current_timestamp(), server_onupdate=func.current_timestamp(), nullable=False),
+]

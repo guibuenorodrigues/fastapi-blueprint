@@ -1,8 +1,8 @@
 from functools import lru_cache
 from pathlib import Path
-from typing import Literal
+from typing import Annotated, Any, Literal
 
-from pydantic import Field
+from pydantic import AnyUrl, Field, PlainValidator, computed_field
 from pydantic_settings import (
     BaseSettings,
     PydanticBaseSettingsSource,
@@ -11,6 +11,14 @@ from pydantic_settings import (
 )
 
 from src.core.enums import EnvironmentEnum
+
+
+def parse_cors(v: Any) -> list[str] | str:
+    if isinstance(v, str) and not v.startswith("["):
+        return [i.strip() for i in v.split(",")]
+    elif isinstance(v, list | str):
+        return v
+    raise ValueError(v)
 
 
 class ApplicationSettings(BaseSettings):
@@ -24,6 +32,13 @@ class ApplicationSettings(BaseSettings):
     REQUEST_LOG_LEVEL: Literal["CRITICAL", "FATAL", "ERROR", "WARNING", "INFO", "DEBUG"] = "INFO"
     ERROR_LOG_LEVEL: Literal["CRITICAL", "FATAL", "ERROR", "WARNING", "INFO", "DEBUG"] = "ERROR"
     DATABASE_URL: str
+    FRONTEND_HOST: str = "http://localhost:8000"
+    BACKEND_CORS_ORIGINS: Annotated[list[AnyUrl] | str, PlainValidator(parse_cors)] = []
+
+    @computed_field
+    @property
+    def allowed_cors_origins(self) -> list[str]:
+        return [str(origin).rstrip("/") for origin in self.BACKEND_CORS_ORIGINS] + [self.FRONTEND_HOST]
 
     model_config = SettingsConfigDict(extra="ignore", case_sensitive=True, env_file=".env")
 

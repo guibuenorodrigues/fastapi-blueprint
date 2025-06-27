@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from src import routes
 from src.api.middleware.error_handling import ErrorHandlingMiddleware
@@ -23,6 +24,14 @@ def create_app() -> FastAPI:
 
     app.add_middleware(ErrorHandlingMiddleware)
     app.add_middleware(RequestLoggingMiddleware)
+
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=settings.allowed_cors_origins,
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
 
     routes.setup(app)
 

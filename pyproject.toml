@@ -12,6 +12,7 @@ dependencies = [
     "colorlog>=6.9.0",
     "fastapi[standard]>=0.115.13",
     "pydantic-settings>=2.10.1",
+    "python-jose>=3.5.0",
     "python-json-logger>=3.3.0",
     "sqlalchemy>=2.0.41",
 ]
