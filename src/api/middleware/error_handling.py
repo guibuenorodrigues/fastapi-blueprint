@@ -2,11 +2,12 @@
 
 import logging
 
-from app.core.exceptions import CustomException  # Your custom base exception
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.requests import Request
 from starlette.responses import JSONResponse
 from starlette.status import HTTP_500_INTERNAL_SERVER_ERROR
+
+from src.core.exceptions import CustomException  # Your custom base exception
 
 error_logger = logging.getLogger("api.errors")
 
