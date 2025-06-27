@@ -14,6 +14,7 @@ class Settings(BaseSettings):
     """Application Settings."""
 
     DEBUG: bool = False
+    DATABASE_URL: str
 
     model_config = SettingsConfigDict(extra="ignore", case_sensitive=True)
 
@@ -34,11 +35,7 @@ class ProjectSettings(Settings):
         dotenv_settings: PydanticBaseSettingsSource,
         file_secret_settings: PydanticBaseSettingsSource,
     ) -> tuple[PydanticBaseSettingsSource, ...]:
-        return (
-            PyprojectTomlConfigSettingsSource(
-                settings_cls, Path.cwd() / "pyproject.toml"
-            ),
-        )
+        return (PyprojectTomlConfigSettingsSource(settings_cls, Path.cwd() / "pyproject.toml"),)
 
     model_config = SettingsConfigDict(
         pyproject_toml_table_header=("project",),
