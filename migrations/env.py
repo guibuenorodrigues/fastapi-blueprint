@@ -12,16 +12,14 @@ from src.db.base import Base
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 config = context.config
+
+# Use the same DATABASE_URL as your FastAPI app (no conversion needed)
 config.set_main_option("sqlalchemy.url", settings.DATABASE_URL)
 
 # Interpret the config file for Python logging.
-# This line sets up loggers basically.
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-# add your model's MetaData object here
-# for 'autogenerate' support
-# from myapp import mymodel
 target_metadata = Base.metadata
 
 target_metadata.naming_convention = {
@@ -58,6 +56,7 @@ def run_migrations_offline() -> None:
 
 
 def do_run_migrations(connection: Connection) -> None:
+    """Configure the context and run migrations."""
     context.configure(connection=connection, target_metadata=target_metadata)
 
     with context.begin_transaction():
@@ -65,11 +64,11 @@ def do_run_migrations(connection: Connection) -> None:
 
 
 async def run_async_migrations() -> None:
-    """In this scenario we need to create an Engine
-    and associate a connection with the context.
+    """Create an async engine and run migrations.
 
+    This is like using the same car (asyncpg driver) for both
+    daily driving (FastAPI) and heavy hauling (migrations).
     """
-
     connectable = async_engine_from_config(
         config.get_section(config.config_ini_section, {}),
         prefix="sqlalchemy.",
@@ -83,8 +82,7 @@ async def run_async_migrations() -> None:
 
 
 def run_migrations_online() -> None:
-    """Run migrations in 'online' mode."""
-
+    """Run migrations in 'online' mode using async engine."""
     asyncio.run(run_async_migrations())
 
 
