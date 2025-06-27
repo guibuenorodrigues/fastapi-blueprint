@@ -16,4 +16,5 @@ async def http_client() -> AsyncClient:
         yield ac
 
 
+# HTTPClient type for AsyncClient
 HTTPCLient = Annotated[AsyncClient, http_client]
