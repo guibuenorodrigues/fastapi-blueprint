@@ -15,10 +15,10 @@ def create_app() -> FastAPI:
 
     # setup FastAPI
     app = FastAPI(
-        title=settings.NAME,
+        title=settings.APP_NAME,
         debug=settings.DEBUG,
-        description=settings.DESCRIPTION,
-        version=settings.VERSION,
+        description=settings.APP_DESCRIPTION,
+        version=settings.APP_VERSION,
     )
 
     app.add_middleware(ErrorHandlingMiddleware)

@@ -1,5 +1,6 @@
 from functools import lru_cache
 from pathlib import Path
+from typing import Literal
 
 from pydantic import Field
 from pydantic_settings import (
@@ -9,11 +10,19 @@ from pydantic_settings import (
     SettingsConfigDict,
 )
 
+from src.core.enums import EnvironmentEnum
+
 
 class ApplicationSettings(BaseSettings):
     """Application-specific settings, extending project settings and also reading from .env."""
 
     DEBUG: bool = False
+    ENVIRONMENT: EnvironmentEnum = EnvironmentEnum.DEV
+    LOG_FORMAT: Literal["plaintext", "json"] = "json"
+    LOG_LEVEL: Literal["CRITICAL", "FATAL", "ERROR", "WARNING", "INFO", "DEBUG"] = "INFO"
+    UVICORN_LOG_LEVEL: Literal["CRITICAL", "FATAL", "ERROR", "WARNING", "INFO", "DEBUG"] = "WARNING"
+    REQUEST_LOG_LEVEL: Literal["CRITICAL", "FATAL", "ERROR", "WARNING", "INFO", "DEBUG"] = "INFO"
+    ERROR_LOG_LEVEL: Literal["CRITICAL", "FATAL", "ERROR", "WARNING", "INFO", "DEBUG"] = "ERROR"
     DATABASE_URL: str
 
     model_config = SettingsConfigDict(extra="ignore", case_sensitive=True, env_file=".env")
@@ -22,9 +31,9 @@ class ApplicationSettings(BaseSettings):
 class ProjectSettings(ApplicationSettings):
     """Base settings for project metadata, loaded from pyproject.toml."""
 
-    NAME: str = Field(alias="name")
-    VERSION: str = Field(alias="version")
-    DESCRIPTION: str = Field(alias="description")
+    APP_NAME: str = Field(alias="name")
+    APP_VERSION: str = Field(alias="version")
+    APP_DESCRIPTION: str = Field(alias="description")
 
     @classmethod
     def settings_customise_sources(
@@ -61,5 +70,4 @@ def get_settings() -> Settings:
     return Settings()
 
 
-print("chamaaaa", Settings())
 settings = get_settings()
